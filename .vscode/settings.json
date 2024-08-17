@@ -1,0 +1,9 @@
+{
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "package.json": "package-lock.json, tsconfig.json, tsconfig.node.json, svelte.config.js, tailwind.config.js, vite.config.ts, components.json, postcss.config.js",
+    },
+    "files.exclude": {
+        "node_modules": true,
+    }
+}
