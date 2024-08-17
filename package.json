@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "preview": "node preview.js",
     "build": "vite build",
-    "preview": "vite preview",
+    "serve": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
   },
   "devDependencies": {
@@ -17,5 +18,9 @@
     "tslib": "^2.6.3",
     "typescript": "^5.5.3",
     "vite": "^5.4.1"
+  },
+  "dependencies": {
+    "@inquirer/select": "^2.4.7",
+    "vite-plugin-singlefile": "^2.0.2"
   }
 }
