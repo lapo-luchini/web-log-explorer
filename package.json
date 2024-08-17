@@ -17,10 +17,13 @@
     "svelte-check": "^3.8.5",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vite-plugin-singlefile": "^2.0.2"
   },
   "dependencies": {
     "@inquirer/select": "^2.4.7",
-    "vite-plugin-singlefile": "^2.0.2"
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.2",
+    "tailwind-variants": "^0.2.1"
   }
 }
