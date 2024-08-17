@@ -31,7 +31,7 @@ const logUrl = await select({
 const server = http.createServer(async (req, res) => {
   try {
     // Forward the request to the target URL using the fetch API
-    const targetResponse = await fetch(logUrl, {
+    const targetResponse = await fetch(logUrl + req.url, {
       method: req.method,
       headers: req.headers,
     });
@@ -60,7 +60,7 @@ const server = http.createServer(async (req, res) => {
 
 // Listen on the specified port and hostname
 const hostname = "localhost";
-const port = 4174;
+const port = 5174;
 server.listen(port, hostname, () => {
   console.log(
     `Proxy server running at http://${hostname}:${port}/ to ${logUrl}`
@@ -68,8 +68,7 @@ server.listen(port, hostname, () => {
 });
 
 // Run the vite server
-// const command = `LOG_URL=http://${hostname}:${port}/ npm run build && npm run preview`;
-const command = `VITE_LOG_URL=http://${hostname}:${port}/ FORCE_COLOR=1 npm run build && FORCE_COLOR=1 npm run serve`;
+const command = `VITE_LOG_URL=http://${hostname}:${port}/ FORCE_COLOR=1 npm run dev`;
 const child = exec(command);
 child.stdout.pipe(stdout);
 child.stderr.pipe(stderr);

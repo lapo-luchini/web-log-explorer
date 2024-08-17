@@ -14,7 +14,6 @@
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tsconfig/svelte": "^5.0.4",
     "autoprefixer": "^10.4.20",
-    "svelte": "^4.2.18",
     "svelte-check": "^3.8.5",
     "tailwindcss": "^3.4.9",
     "tslib": "^2.6.3",
@@ -25,6 +24,7 @@
   "dependencies": {
     "@inquirer/select": "^2.4.7",
     "clsx": "^2.1.1",
+    "svelte": "^4.2.18",
     "tailwind-merge": "^2.5.2",
     "tailwind-variants": "^0.2.1"
   }
