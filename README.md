@@ -7,3 +7,7 @@ To build an `index.html` file for your serverless tile based log, fill in the .e
 If the `index.html` is located at a path on the same domain as the monitoring URL, then things will work properly. If the file is located on a seperate domain, the log needs to return proper CORS headers on its responses.
 
 When running locally, all requests to the selected log are made through a local proxy server which adds a CORS header to the response.
+
+### Preview
+
+![web based log explorer ui preview](preview.jpg)
