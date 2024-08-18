@@ -3,6 +3,7 @@ export interface Checkpoint {
   entries: number;
   root_hash: string;
   signature: string;
+  text: string;
 }
 
 export async function getCheckpoint(): Promise<Checkpoint> {
@@ -16,6 +17,7 @@ export async function getCheckpoint(): Promise<Checkpoint> {
     entries: parseInt(lines[1], 10),
     root_hash: lines[2],
     signature: lines[3].slice(2), // Removes the leading "— "
+    text,
   };
 }
 

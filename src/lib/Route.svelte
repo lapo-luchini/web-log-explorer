@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import Checkpoint from "./Checkpoint.svelte";
-  import Entry from "./Entry.svelte";
+  import Checkpoint from "$lib/Checkpoint.svelte";
+  import Entry from "$lib/Entry.svelte";
+  import Button from "$lib/components/ui/button/button.svelte";
+  import { ArrowLeft, ArrowRight, RotateCw } from "lucide-svelte";
 
   // Index is the index rendered by the Entry component
   let index: number | undefined;
@@ -60,36 +62,27 @@
   }
 </script>
 
-<!-- Bind mostRecent to allow updates to flow up from the child component -->
-<!-- Remounter forces the component to refresh -->
-<Checkpoint bind:finalIndex bind:this={checkpointRef} />
+<div class="flex flex-col items-center justify-start gap-4 min-h-screen pt-10 pb-20">
+  <!-- Bind mostRecent to allow updates to flow up from the child component -->
+  <Checkpoint bind:finalIndex bind:this={checkpointRef} />
 
-<br />
+  {#if index !== undefined}
+    <div class="flex items-center justify-center gap-6">
+      <Button
+        on:click={goBack}
+        class={!index ? "invisible pointer-events-none" : ""}
+        ><ArrowLeft /></Button
+      >
 
-{#if index === finalIndex}
-  <button on:click={() => refresh()}>Refresh</button>
-{:else}
-  <div />
-{/if}
+      <div class="w-20 text-center">{index}</div>
 
-<br />
+      {#if index !== finalIndex}
+        <Button on:click={goForward}><ArrowRight /></Button>
+      {:else}
+        <Button on:click={() => refresh()}><RotateCw /></Button>
+      {/if}
+    </div>
 
-{#if index}
-  <button on:click={goBack}>Back</button>
-{:else}
-  <div />
-{/if}
-
-<br />
-
-{#if index !== finalIndex}
-  <button on:click={goForward}>Forward</button>
-{:else}
-  <div />
-{/if}
-
-<br />
-
-{#if index !== undefined}
-  <Entry {index} />
-{/if}
+    <Entry {index} />
+  {/if}
+</div>

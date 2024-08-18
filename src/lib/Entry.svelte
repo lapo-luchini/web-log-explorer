@@ -11,8 +11,6 @@
   $: refreshLeaf(index);
 </script>
 
-<div>
-  <p>{index}</p>
-  <br />
-  <pre>{text}</pre>
+<div class="border border-black">
+  <pre class="p-2">{text}</pre>
 </div>

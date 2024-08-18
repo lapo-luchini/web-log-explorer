@@ -23,7 +23,9 @@
   },
   "dependencies": {
     "@inquirer/select": "^2.4.7",
+    "bits-ui": "^0.21.13",
     "clsx": "^2.1.1",
+    "lucide-svelte": "^0.428.0",
     "svelte": "^4.2.18",
     "tailwind-merge": "^2.5.2",
     "tailwind-variants": "^0.2.1"

@@ -21,10 +21,8 @@
 </script>
 
 {#if checkpoint}
-  <div>
-    <h2>Checkpoint</h2>
-    <p>{checkpoint.origin}</p>
-    <p>{checkpoint.entries}</p>
+  <div class="border border-black">
+    <pre class="p-2">{checkpoint.text}</pre>
   </div>
 {:else}
   <p>Loading...</p>
