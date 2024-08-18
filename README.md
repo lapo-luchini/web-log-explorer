@@ -10,4 +10,6 @@ When running locally, all requests to the selected log are made through a local 
 
 ### Preview
 
+[Live preview](https://armory-drive-log-explorer.pages.dev/) for Armory Drive Prod 2. This is the only log with `access-control-allow-origin: *`, but it only has two entries.
+
 ![web based log explorer ui preview](preview.jpg)
