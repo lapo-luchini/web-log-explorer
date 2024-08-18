@@ -2,8 +2,9 @@
   import { onDestroy, onMount } from "svelte";
   import Checkpoint from "$lib/Checkpoint.svelte";
   import Entry from "$lib/Entry.svelte";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import { ArrowLeft, ArrowRight, RotateCw } from "lucide-svelte";
+  import RotateCw from "$lib/icons/RotateCw.svelte";
+  import ArrowLeft from "$lib/icons/ArrowLeft.svelte";
+  import ArrowRight from "$lib/icons/ArrowRight.svelte";
 
   // Index is the index rendered by the Entry component
   let index: number | undefined;
@@ -60,26 +61,33 @@
     window.history.replaceState(undefined, "", window.location.pathname);
     checkpointRef.refresh();
   }
+
+  const buttonStyle = "w-12 h-12 p-3";
 </script>
 
-<div class="flex flex-col items-center justify-start gap-4 min-h-screen pt-10 pb-20">
+<div
+  class="flex flex-col items-center justify-start gap-6 min-h-screen pt-10 pb-20"
+>
   <!-- Bind mostRecent to allow updates to flow up from the child component -->
   <Checkpoint bind:finalIndex bind:this={checkpointRef} />
 
   {#if index !== undefined}
     <div class="flex items-center justify-center gap-6">
-      <Button
+      <button
         on:click={goBack}
-        class={!index ? "invisible pointer-events-none" : ""}
-        ><ArrowLeft /></Button
+        class={buttonStyle + (!index ? "invisible pointer-events-none " : "")}
       >
+        <ArrowLeft />
+      </button>
 
-      <div class="w-20 text-center">{index}</div>
+      <div class="w-32 text-center">Leaf {index}</div>
 
       {#if index !== finalIndex}
-        <Button on:click={goForward}><ArrowRight /></Button>
+        <button class={buttonStyle} on:click={goForward}><ArrowRight /></button>
       {:else}
-        <Button on:click={() => refresh()}><RotateCw /></Button>
+        <button class={buttonStyle} on:click={() => refresh()}>
+          <RotateCw />
+        </button>
       {/if}
     </div>
 
