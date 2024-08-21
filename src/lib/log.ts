@@ -6,9 +6,8 @@ export interface Checkpoint {
   text: string;
 }
 
-export async function getCheckpoint(): Promise<Checkpoint> {
-  console.log("Getting checkpoint");
-  const resp = await fetch(import.meta.env.VITE_LOG_URL + "checkpoint");
+export async function getCheckpoint(logUrl: string): Promise<Checkpoint> {
+  const resp = await fetch(logUrl + "checkpoint");
   const text = await resp.text();
   const lines = text.split("\n");
 
@@ -38,9 +37,9 @@ function formatInteger(num: number): string {
   return parts.join("/");
 }
 
-export async function getLeaf(index: number): Promise<string> {
+export async function getLeaf(logUrl: string, index: number): Promise<string> {
   const resp = await fetch(
-    import.meta.env.VITE_LOG_URL + "seq/" + formatInteger(index)
+    logUrl + "seq/" + formatInteger(index)
   );
   return resp.text();
 }

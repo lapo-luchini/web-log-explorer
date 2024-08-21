@@ -1,11 +1,9 @@
 <script>
-  import Route from "$lib/Route.svelte";
+  import LogSelect from "$lib/LogSelect.svelte";
 </script>
 
 <main class="bg-hideout">
-  <div>
-    <Route />
-  </div>
+  <LogSelect />
 </main>
 
 <style>

@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { getCheckpoint, type Checkpoint } from "$lib/log";
+
+  const logUrl: string = getContext("log_url");
 
   export let finalIndex: number | undefined;
   export function refresh() {
-    getCheckpoint().then((cp) => {
+    getCheckpoint(logUrl).then((cp) => {
       checkpoint = cp;
     });
   }
@@ -16,7 +18,7 @@
   }
 
   onMount(async () => {
-    checkpoint = await getCheckpoint();
+    checkpoint = await getCheckpoint(logUrl);
   });
 </script>
 
