@@ -23,8 +23,8 @@
 </script>
 
 {#if checkpoint}
-  <div class="border border-black">
-    <pre class="p-2">{checkpoint.text}</pre>
+  <div class="border border-black max-w-full">
+    <pre class="p-2 whitespace-pre-wrap overflow-auto">{checkpoint.text}</pre>
   </div>
 {:else}
   <p>Loading...</p>

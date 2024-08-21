@@ -15,8 +15,8 @@
 </script>
 
 {#if text !== undefined}
-  <div class="border border-black">
-    <pre class="p-2">{text}</pre>
+  <div class="border border-black max-w-full">
+    <pre class="p-2 whitespace-pre-wrap overflow-auto">{text}</pre>
   </div>
 {:else}
   <p>Loading...</p>

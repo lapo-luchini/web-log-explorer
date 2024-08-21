@@ -66,7 +66,7 @@
 </script>
 
 <div
-  class="flex flex-col items-center justify-start gap-6 min-h-screen pt-10 pb-20"
+  class="flex flex-col items-center justify-start gap-6 min-h-screen max-w-full pt-10 pb-20"
 >
   <!-- Bind mostRecent to allow updates to flow up from the child component -->
   <Checkpoint bind:finalIndex bind:this={checkpointRef} />
