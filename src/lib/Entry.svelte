@@ -21,8 +21,10 @@ Leaf Index: {entry.LeafIndex}
 Timestamp: {entry.Timestamp}
 Fingerprint: {buf2hex(entry.CertificateFp)}
 
+Submission in local time: {new Date(entry.Timestamp).toLocaleString()}
+
 <a href="https://crt.sh/?q={buf2hex(entry.CertificateFp)}"
-        >Click to view full details on crt.sh</a
+        >Click to view full details on crt.sh (this will not work for brand new certs)</a
       ></pre>
   </div>
 {:else}
