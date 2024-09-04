@@ -20,6 +20,7 @@
 Leaf Index: {entry.LeafIndex}
 Timestamp: {entry.Timestamp}
 Fingerprint: {buf2hex(entry.CertificateFp)}
+Entry Type: {entry.IsPrecert ? "Precert" : "X.509 Certificate"}
 
 Submission in local time: {new Date(entry.Timestamp).toLocaleString()}
 
