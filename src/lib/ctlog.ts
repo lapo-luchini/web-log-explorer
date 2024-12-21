@@ -36,19 +36,29 @@ export async function getIndex(
   index: number
 ): Promise<LogEntry> {
   const total = (await getCheckpoint(logUrl)).entries;
-  let tile = await getLeaf(logUrl, leafForIndex(index), total);
-
-  let reader = new ByteReader(tile);
-
-  // call ReadTileLeaf in a loop until the index of the log entry is found
-  while (reader.length() > 0) {
-    const entry = await ReadTileLeaf(reader);
-    if (entry.LeafIndex === index) {
-      return entry;
-    }
+  let leaf = index >>> HEIGHT;
+  let relIdx = index - (leaf << HEIGHT);
+  console.log('Looking for index', index, 'tile', leaf, 'offset', relIdx);
+  const resp = await fetch(logUrl + pathForLeaf(leaf, total));
+  const tile = new Uint8Array(await resp.arrayBuffer());
+  const reader = new ByteReader(tile);
+  for (let i = 0; i < relIdx; ++i) {
+    let length = reader.readUint16();
+    console.log('Skipping entry', i, 'length', length);
+    reader.skip(length);
   }
-
-  throw new Error("entry not found");
+  const e = new LogEntry();
+  let length = reader.readUint16();
+  let lastModified = resp.headers.get('last-modified');
+  console.log('Last modified', lastModified);
+  if (lastModified != null)
+    e.Timestamp = Date.parse(lastModified);
+  const raw = reader.read(length);
+  e.Data = new TextDecoder().decode(raw);
+  e.Hash = new Uint8Array(
+    await crypto.subtle.digest("SHA-256", raw)
+  );
+  return e;
 }
 
 // ---------------------------------------------------------
@@ -72,29 +82,15 @@ function pathForLeaf(i: number, total: number): string {
     pStr = `.p/${finalWidth}`;
   }
 
-  return `tile/data/${nStr}${pStr}`;
-}
-
-async function getLeaf(
-  logUrl: string,
-  index: number,
-  total: number
-): Promise<Uint8Array> {
-  const resp = await fetch(logUrl + pathForLeaf(index, total));
-  return new Uint8Array(await resp.arrayBuffer());
+  return `tile/entries/${nStr}${pStr}`;
 }
 
 // ---------------------------------------------------------
 
 export class LogEntry {
   Timestamp: number = 0;
-  IsPrecert: boolean = false;
-  Certificate: Uint8Array = new Uint8Array();
-  PreCertificate: Uint8Array = new Uint8Array();
-  IssuerKeyHash: Uint8Array = new Uint8Array(32);
-  ChainFp: Uint8Array[] = [];
-  CertificateFp: Uint8Array = new Uint8Array(32);
-  LeafIndex: number = 0;
+  Data: string = '';
+  Hash: Uint8Array = new Uint8Array(32);
 }
 
 class ByteReader {
@@ -149,6 +145,10 @@ class ByteReader {
     return value;
   }
 
+  skip(x: number) {
+    this.offset += x;
+  }
+
   read(x: number): Uint8Array {
     const value = new Uint8Array(this.view.buffer, this.offset, x);
     this.offset += x;
@@ -158,63 +158,4 @@ class ByteReader {
   length(): number {
     return this.view.byteLength - this.offset;
   }
-}
-
-async function ReadTileLeaf(tile: ByteReader): Promise<LogEntry> {
-  const e = new LogEntry();
-  const reader = tile;
-
-  let timestamp = reader.readUint64();
-  let entryType = reader.readUint16();
-
-  if (timestamp > Number.MAX_SAFE_INTEGER) {
-    throw new Error("invalid data tile");
-  }
-  e.Timestamp = Number(timestamp);
-
-  let extensions: Uint8Array;
-  switch (entryType) {
-    case 0: // x509_entry
-      e.Certificate = reader.readUint24LengthPrefixed();
-      extensions = reader.readUint16LengthPrefixed();
-      break;
-    case 1: // precert_entry
-      e.IsPrecert = true;
-      e.IssuerKeyHash.set(reader.read(32));
-      e.Certificate = reader.readUint24LengthPrefixed();
-      extensions = reader.readUint16LengthPrefixed();
-      e.PreCertificate = reader.readUint24LengthPrefixed();
-      break;
-    default:
-      throw new Error(`invalid data tile: unknown type ${entryType}`);
-  }
-
-  let fingerprintBytes = reader.readUint16();
-  const fingerprintCount = fingerprintBytes / 32;
-  e.ChainFp = [];
-  for (let i = 0; i < fingerprintCount; i++) {
-    const fingerprint = new Uint8Array(reader.read(32));
-    e.ChainFp.push(fingerprint);
-  }
-
-  if (e.IsPrecert) {
-    e.CertificateFp = new Uint8Array(
-      await crypto.subtle.digest("SHA-256", e.PreCertificate)
-    );
-  } else {
-    e.CertificateFp = new Uint8Array(
-      await crypto.subtle.digest("SHA-256", e.Certificate)
-    );
-  }
-
-  let leafIndex =
-    (extensions[3] << 32) |
-    (extensions[4] << 24) |
-    (extensions[5] << 16) |
-    (extensions[6] << 8) |
-    extensions[7];
-
-  e.LeafIndex = leafIndex;
-
-  return e;
 }

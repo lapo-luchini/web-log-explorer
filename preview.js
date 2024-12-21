@@ -9,6 +9,10 @@ const logUrl = await select({
   message: "Select a log",
   choices: [
     {
+      name: "Andxor TLog",
+      value: "https://tlog.andxor.it/",
+    },
+    {
       name: "Itko CT Log 2025",
       value: "https://ct2025.itko.dev/",
     },
@@ -61,6 +65,9 @@ const server = http.createServer(async (req, res) => {
         "Content-Type",
         targetResponse.headers.get("Content-Type") || "text/plain"
       );
+      let lastModified = targetResponse.headers.get("Last-Modified");
+      if (lastModified)
+        res.setHeader("Last-Modified", lastModified );
       res.setHeader("Access-Control-Allow-Origin", "*");
 
       // Send the response body

@@ -17,16 +17,13 @@
 {#if entry !== undefined}
   <div class="border border-black max-w-full">
     <pre class="p-2 whitespace-pre-wrap overflow-auto">
-Leaf Index: {entry.LeafIndex}
-Timestamp: {entry.Timestamp}
-Fingerprint: {buf2hex(entry.CertificateFp)}
-Entry Type: {entry.IsPrecert ? "Precert" : "X.509 Certificate"}
+Timestamp:   {entry.Timestamp}
+UTC time:    {new Date(entry.Timestamp).toISOString()}
+Local time:  {new Date(entry.Timestamp).toLocaleString()}
+Fingerprint: {buf2hex(entry.Hash)}
 
-Submission in local time: {new Date(entry.Timestamp).toLocaleString()}
-
-<a href="https://crt.sh/?q={buf2hex(entry.CertificateFp)}"
-        >Click to view full details on crt.sh (this will not work for brand new certs)</a
-      ></pre>
+{entry.Data}
+    </pre>
   </div>
 {:else}
   <p>Loading...</p>
